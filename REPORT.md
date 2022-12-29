@@ -78,3 +78,8 @@ To implement
 - Move code into Project folder and separate into relevante modules and classes
 - Train on more data (if applicable and relavant for segmentation task in question)
 - Predict on more dataset and compare results. 
+
+
+## Datasets Used
+Kuijf, Hugo; Biesbroek, Matthijs; de Bresser, Jeroen; Heinen, Rutger; Chen, Christopher; van der Flier, Wiesje; Barkhof; Viergever, Max; Biessels, Geert Jan, 2022, "Data of the White Matter Hyperintensity (WMH) Segmentation Challenge", https://doi.org/10.34894/AECRSD, DataverseNL, V1
+

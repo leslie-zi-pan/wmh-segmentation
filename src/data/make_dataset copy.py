@@ -4,8 +4,8 @@ import logging
 from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
 
-def make_2d_slice_dataset_handler(input_filepath, output_filepath):
-
+def make_2d_slice_dataset(input_filepath, output_filepath):
+    
 
 
 @click.argument('input_filepath', type=click.Path(exists=True))
@@ -15,7 +15,6 @@ def main(input_filepath, output_filepath):
         cleaned data ready to be analyzed (saved in ../processed).
     """
     logger = logging.getLogger(__name__)
-    make_2d_slice_dataset_handler(input_filepath, output_filepath)
     logger.info('making final data set from raw data')
 
 

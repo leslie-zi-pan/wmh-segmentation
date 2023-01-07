@@ -14,3 +14,4 @@ torchvision
 torchaudio
 nibabel 
 opencv-python
+python-dotenv

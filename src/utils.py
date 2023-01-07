@@ -5,7 +5,6 @@ import torch
 import cv2
 from src.enums import DataDict
 
-
 def normalize_img_intensity_range(img):
     min_val, max_val = np.min(img), np.max(img)
     range = max_val - min_val

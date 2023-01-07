@@ -3,9 +3,8 @@ import logging
 import os
 from os import path
 from pathlib import Path
-
-import click
 from dotenv import find_dotenv, load_dotenv
+import click
 
 from src.enums import (AMSTERDAM_RAW_VOLUME_TESTING_IMG_PATHS,
                        AMSTERDAM_RAW_VOLUME_TRAINING_IMG_PATHS,
@@ -13,6 +12,8 @@ from src.enums import (AMSTERDAM_RAW_VOLUME_TESTING_IMG_PATHS,
                        SINGAPORE_RAW_VOLUME_TRAINING_IMG_PATHS,
                        UTRECHT_RAW_VOLUME_TESTING_IMG_PATHS,
                        UTRECHT_RAW_VOLUME_TRAINING_IMG_PATHS,
+                       INTERIM_TESTING_DIR,
+                       INTERIM_TRAINING_DIR,
                        INTERIM_TRAIN_DIR_DICT,
                        INTERIM_TEST_DIR_DICT,
                        CountryDirType, DataDict)
@@ -45,8 +46,11 @@ def slice_volume_handler(raw_data_paths, interim_dir_dict):
         country_dir_type = filedict[DataDict.CountryDirType]
         output_country_dir = interim_dir_dict[country_dir_type]
         subject_slice_dir = os.path.join(output_country_dir, f'{subj_id}/')
+        
+        if not path.exists(output_country_dir):
+            os.mkdir(output_country_dir)
 
-        if path.exists(subject_slice_dir) == False:
+        if not path.exists(subject_slice_dir):
             os.mkdir(subject_slice_dir)
             os.mkdir(subject_slice_dir + 'Image/')
             os.mkdir(subject_slice_dir + 'Image/T1/')
@@ -75,6 +79,13 @@ def main():
         cleaned data ready to be analyzed (saved in ../processed).
     """
     logger.info('>> Creating slice images from volume images')
+    # Create interim training and testing dir if not exist
+    if not path.exists(INTERIM_TRAINING_DIR):
+        os.mkdir(INTERIM_TRAINING_DIR)
+    
+    if not path.exists(INTERIM_TESTING_DIR):
+        os.mkdir(INTERIM_TESTING_DIR)
+
     raw_train_paths = get_train_raw_paths()
     raw_test_paths = get_test_raw_paths()
 

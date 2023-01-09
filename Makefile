@@ -8,7 +8,7 @@ PROJECT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 BUCKET = [OPTIONAL] your-bucket-for-syncing-data (do not include 's3://')
 PROFILE = default
 PROJECT_NAME = wmh-segmentation
-PYTHON_INTERPRETER = python3
+PYTHON_INTERPRETER = python
 
 ifeq (,$(shell which conda))
 HAS_CONDA=False
@@ -26,8 +26,14 @@ requirements: test_environment
 	$(PYTHON_INTERPRETER) -m pip install -r requirements.txt
 
 ## Make Dataset
-data: requirements
-	$(PYTHON_INTERPRETER) src/data/make_dataset.py data/raw data/processed
+data: #requirements
+	@echo ">>> Preprocessing data: Creating slices from volume images."
+	$(PYTHON_INTERPRETER) src/data/make_dataset.py
+
+## Make data for machine learning modeling
+data_model:
+	@echo ">>> Preprocessing data for machine learning"
+	$(PYTHON_INTERPRETER) src/features/build_features.py
 
 ## Delete all compiled Python files
 clean:

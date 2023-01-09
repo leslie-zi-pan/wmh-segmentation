@@ -4,6 +4,12 @@ import nibabel as nib
 import torch
 import cv2
 from src.enums import DataDict
+import logging
+
+
+logger = logging.getLogger(__name__)
+log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+logging.basicConfig(level=logging.INFO, format=log_fmt)
 
 def normalize_img_intensity_range(img):
     min_val, max_val = np.min(img), np.max(img)
@@ -51,7 +57,7 @@ def save_slice(img, fname, path, to_nifti):
         nib.save(img, fout)  
     else:
         cv2.imwrite(fout, img)
-    print(f'[+] Slice saved: {fout}')
+    logging.info(f'Slice saved: {fout}')
 
 def slice_and_save_volume_image(vol, fname, path, to_nifti=True):
     (dimx, dimy, dimz) = vol.shape
@@ -63,17 +69,17 @@ def slice_and_save_volume_image(vol, fname, path, to_nifti=True):
     SLICE_DECIMATE_IDENTIFIER = 3
     if SLICE_X:
         count += dimx
-        print('Slicing X: ')
+        logging.info('Slicing X: ')
         for i in range(dimx):
             save_slice(vol[i, :, :], fname + f'-slice{str(i).zfill(SLICE_DECIMATE_IDENTIFIER)}_x', path, to_nifti)
     if SLICE_Y:
         count += dimx
-        print('Slicing Y: ')
+        logging.info('Slicing Y: ')
         for i in range(dimy):
             save_slice(vol[:, i, :], fname + f'-slice{str(i).zfill(SLICE_DECIMATE_IDENTIFIER)}_y', path, to_nifti)
     if SLICE_Z:
         count += dimx
-        print('Slicing Z: ')
+        logging.info('Slicing Z: ')
         for i in range(dimz):
             save_slice(vol[:, :, i], fname + f'-slice{str(i).zfill(SLICE_DECIMATE_IDENTIFIER)}_z', path, to_nifti)
 
@@ -114,3 +120,35 @@ def dict_tensor_to_value(dicts):
 def one_hot(torch_tensor):
     return torch.where(torch_tensor > 0.5, 1, 0)
 
+import glob
+
+def get_interim_data_path(data_paths):
+    image_dict = []
+    ext_type = 'nii.gz'
+
+    for subject in data_paths:
+        subj_id = int(os.path.basename(os.path.normpath(subject)))
+        
+        # # Temporary fix due to dim mismatch
+        # if subj_id in [50, 51]:
+        #     continue
+
+        flair_imgs = sorted(glob.glob(f'{subject}/Image/Flair/*.{ext_type}'))
+        t1_imgs = sorted(glob.glob(f'{subject}/Image/T1/*.{ext_type}'))
+        labels = sorted(glob.glob(f'{subject}/Label/*.{ext_type}'))
+
+        if len(flair_imgs) != len(t1_imgs):
+            assert ValueError("Flair and T1 size mismatch")
+        
+        for i in range(len(flair_imgs)):
+            slice_dict = {
+                DataDict.Id: subj_id,
+                DataDict.ImageFlair: flair_imgs[i],
+                DataDict.ImageT1: t1_imgs[i],
+                DataDict.Label: labels[i],
+                DataDict.DepthZ: i
+            }
+
+            image_dict.append(slice_dict)
+
+    return image_dict

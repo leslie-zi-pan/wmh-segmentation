@@ -15,3 +15,4 @@ torchaudio
 nibabel 
 opencv-python
 python-dotenv
+torchsummary

@@ -1,6 +1,2 @@
 notebooks/** linguist-vendored
-<<<<<<< HEAD
 *.ipynb linguist-vendored
-=======
-*.ipynb linguist-vendored
->>>>>>> c289f03182674c49cf46317d57aaee520e47d95f

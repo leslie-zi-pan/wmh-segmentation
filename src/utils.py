@@ -128,7 +128,7 @@ def get_interim_data_path(data_paths):
 
     for subject in data_paths:
         subj_id = int(os.path.basename(os.path.normpath(subject)))
-        
+
         # # Temporary fix due to dim mismatch
         # if subj_id in [50, 51]:
         #     continue
@@ -139,10 +139,11 @@ def get_interim_data_path(data_paths):
 
         if len(flair_imgs) != len(t1_imgs):
             assert ValueError("Flair and T1 size mismatch")
-        
+
         for i in range(len(flair_imgs)):
             slice_dict = {
                 DataDict.Id: subj_id,
+                DataDict.Image: t1_imgs[i],
                 DataDict.ImageFlair: flair_imgs[i],
                 DataDict.ImageT1: t1_imgs[i],
                 DataDict.Label: labels[i],

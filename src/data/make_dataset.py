@@ -6,10 +6,10 @@ from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
 import click
 
-from src.enums import (AMSTERDAM_RAW_VOLUME_TESTING_IMG_PATHS,
-                       AMSTERDAM_RAW_VOLUME_TRAINING_IMG_PATHS,
+from src.enums import (AMSTERDAM_INTERIM_TRAINING_DIR, AMSTERDAM_RAW_VOLUME_TESTING_IMG_PATHS,
+                       AMSTERDAM_RAW_VOLUME_TRAINING_IMG_PATHS, SINGAPORE_INTERIM_TRAINING_DIR,
                        SINGAPORE_RAW_VOLUME_TESTING_IMG_PATHS,
-                       SINGAPORE_RAW_VOLUME_TRAINING_IMG_PATHS,
+                       SINGAPORE_RAW_VOLUME_TRAINING_IMG_PATHS, UTRECHT_INTERIM_TRAINING_DIR,
                        UTRECHT_RAW_VOLUME_TESTING_IMG_PATHS,
                        UTRECHT_RAW_VOLUME_TRAINING_IMG_PATHS,
                        INTERIM_TESTING_DIR,
@@ -76,13 +76,13 @@ def slice_volume_handler(raw_data_paths, interim_dir_dict):
 @click.argument('output_filepath', type=click.Path())
 def main():
     """ Runs data processing scripts to turn raw data from (../raw) into
-        cleaned data ready to be analyzed (saved in ../processed).
+        cleaned data ready to be analyzed (saved in ../interim).
     """
     logger.info('>> Creating slice images from volume images')
     # Create interim training and testing dir if not exist
     if not path.exists(INTERIM_TRAINING_DIR):
         os.mkdir(INTERIM_TRAINING_DIR)
-    
+
     if not path.exists(INTERIM_TESTING_DIR):
         os.mkdir(INTERIM_TESTING_DIR)
 

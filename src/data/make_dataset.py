@@ -17,7 +17,7 @@ from src.enums import (AMSTERDAM_INTERIM_TRAINING_DIR, AMSTERDAM_RAW_VOLUME_TEST
                        INTERIM_TRAIN_DIR_DICT,
                        INTERIM_TEST_DIR_DICT,
                        CountryDirType, DataDict)
-from src.utils import image_directories_handler, read_image_volume, slice_and_save_volume_image
+from src.pytorch_utils import image_directories_handler, read_image_volume, slice_and_save_volume_image
 
 logger = logging.getLogger(__name__)
 

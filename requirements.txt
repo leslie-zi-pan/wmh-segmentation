@@ -16,3 +16,11 @@ nibabel
 opencv-python
 python-dotenv
 torchsummary
+
+fastapi==0.104.1
+pydantic==2.5.2
+pydantic_settings==2.1.0
+python-dotenv==1.0.0
+Requests==2.31.0
+uvicorn==0.24.0.post1
+loguru

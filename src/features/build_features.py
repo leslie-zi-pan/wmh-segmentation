@@ -19,7 +19,7 @@ from monai.transforms import (
 )
 
 from src.enums import DataDict
-from src.utils import normalize_img_intensity_range
+from src.pytorch_utils import normalize_img_intensity_range
 
 
 class ImagesToMultiChannel(MapTransform):

@@ -13,3 +13,5 @@ optimizer:
     lr: 1e-3
     weight_decay: 1e-5
     amsgrad: True
+BATCH_SIZE_TRAIN: 128
+BATCH_SIZE_VAL: 64

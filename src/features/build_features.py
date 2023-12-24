@@ -87,9 +87,8 @@ class ConvertToMultiChannelBasedOnLabelsClassesd(MapTransform):
 
             d[key] = np.squeeze(d[key])
 
-            # Other labels and background merge as backgrounds
             result.append(np.logical_or(d[key] == 0, d[key] == 2))
-            # result.append(d[key] == 0)
+            # Other labels and background merge as backgrounds
             result.append(d[key] == 1)
 
             d[key] = np.stack(result, axis=0).astype(np.float32)
@@ -119,9 +118,6 @@ train_transform = Compose(
             prob=0.5,
             spatial_axis=0,
         ),
-        # TestShape(keys=[DataDict.ImageT1, DataDict.ImageFlair]),
-        # NormalizeIntensitydCustom(keys=[DataDict.ImageT1, DataDict.ImageFlair]),
-        # NormalizeIntensityd(keys=[DataDict.ImageT1, DataDict.ImageFlair], nonzero=True, channel_wise=True),
         Rand2DElasticd(
             keys=[DataDict.ImageT1, DataDict.ImageFlair, DataDict.Label],
             spacing=(30, 40),
@@ -162,7 +158,6 @@ val_transform = Compose(
         Orientationd(
             keys=[DataDict.ImageT1, DataDict.ImageFlair, DataDict.Label], axcodes="RAS"
         ),
-        # NormalizeIntensityd(keys=[DataDict.ImageT1, DataDict.ImageFlair], nonzero=True, channel_wise=True),
         ToTensord(keys=[DataDict.ImageT1, DataDict.ImageFlair, DataDict.Label]),
         ImagesToMultiChannel(keys=[DataDict.ImageT1, DataDict.ImageFlair]),
     ]
@@ -185,7 +180,6 @@ test_transform = Compose(
         Orientationd(
             keys=[DataDict.ImageT1, DataDict.ImageFlair, DataDict.Label], axcodes="RAS"
         ),
-        # NormalizeIntensityd(keys=[DataDict.ImageT1, DataDict.ImageFlair], nonzero=True, channel_wise=True),
         ToTensord(keys=[DataDict.ImageT1, DataDict.ImageFlair, DataDict.Label]),
         ImagesToMultiChannel(keys=[DataDict.ImageT1, DataDict.ImageFlair]),
     ]

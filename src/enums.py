@@ -1,7 +1,8 @@
+from enum import StrEnum
 import os
 
 
-class DataDict():
+class DataDict(StrEnum):
     ImageT1 = 'img_t1'
     ImageFlair = 'img_flair'
     Image = 'image'
@@ -11,7 +12,7 @@ class DataDict():
     DepthZ = 'depth_z'
     Prediction = 'prediction'
 
-class CountryDirType():
+class CountryDirType(StrEnum):
     Singapore = 'Singapore'
     Utrecht = 'Utretcht'
     Amsterdam = 'Amsterdam'

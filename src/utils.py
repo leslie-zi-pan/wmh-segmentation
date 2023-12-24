@@ -1,4 +1,5 @@
 import json
+import tempfile
 import yaml
 
 
@@ -60,3 +61,13 @@ def load_text(file_path: str) -> str | None:
         text = None
 
     return text
+
+
+def create_temp_file(api_data):
+    # Create a temporary file
+    with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+        # Write the API data to the temporary file
+        temp_file.write(api_data)
+
+    # Return the path to the temporary file
+    return temp_file.name

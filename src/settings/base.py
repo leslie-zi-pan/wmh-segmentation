@@ -14,3 +14,5 @@ class BaseAppSettings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env")
 
     project_id: str
+    device: str
+    inference_model_fp: str

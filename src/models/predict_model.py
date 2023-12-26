@@ -2,8 +2,6 @@ import torch
 from src.enums import DataDict
 from src.pytorch_utils import get_dicts_from_dicts, one_hot
 from src.settings.config import get_app_settings
-from src.main import app
-
 
 
 class ImagePredictor():

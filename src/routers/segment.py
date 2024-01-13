@@ -1,29 +1,14 @@
-from fastapi import APIRouter, UploadFile
-from nibabel import Nifti1Image
+from typing import Annotated
+from fastapi import APIRouter, Depends, HTTPException
+from src.dependencies.segment import Segment
 from src.models.train_model import model
-
-from src.models.predict_model import ImagePredictor
-
-from monai.data import Dataset, DataLoader
-from src.features.build_features import test_transform
 
 router = APIRouter()
 
 
-async def segment(form_data: UploadFile):
-    form_data = await form_data.read()
-
-    img = Nifti1Image.from_bytes(form_data)
-
-    test_dataset = Dataset(val_paths, test_transform)
-    img_predictor = ImagePredictor(model, test_dataset)
-    test_predictions = img_predictor.predict_handler()
-    print('DONE')
-    return img.get_fdata().shape
-
-
+segment_dependency = Segment(model)
 @router.post("/segment/")
-async def extract_wmh(file: UploadFile):
+async def extract_wmh(image_shape: Annotated[dict, Depends(segment_dependency)]):
     """
     This function returns the segmented image of the brain image.
 
@@ -33,5 +18,9 @@ async def extract_wmh(file: UploadFile):
     Returns:
         The segmented image of the brain image.
     """
+    if not image_shape:
+        raise HTTPException(status_code=400, detail=[
+            "There was an issue reading and processing the data provided", 
+            "You must send through .nii or .png file only"])
 
-    return await segment(file)
+    return image_shape

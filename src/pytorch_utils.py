@@ -100,7 +100,7 @@ def save_slice(img: Tensor, fname: str, path: str, to_nifti: bool) -> None:
     logger.info(f"Slice saved: {fout}")
 
 
-def slice_and_save_volume_image(vol, fname, path, to_nifti=True):
+def slice_and_save_volume_image(vol: Tensor, fname: str, path: str, to_nifti: bool=True):
     """Slices a 3D image volume and saves each slice to a file.
 
     Args:

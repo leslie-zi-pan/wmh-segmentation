@@ -19,12 +19,15 @@ class Segment:
         checkpoint = torch.load(checkpoint_path, map_location=torch.device(device))
         self.model.load_state_dict(checkpoint["model_state_dict"])
 
-    async def __call__(self, brain_mri_image: UploadFile) -> TestMode:
-        form_data = await brain_mri_image.read()
+    async def __call__(self, brain_mri_image: UploadFile) -> TestMode | None:
+        try:
+            form_data = await brain_mri_image.read()
 
-        img = Nifti1Image.from_bytes(form_data)
+            img = Nifti1Image.from_bytes(form_data)
 
-        return {
-            "shape": img.get_fdata().shape,
-            "test": "hello leslie youre brilliant NOT"
-        }
+            return {
+                "shape": img.get_fdata().shape,
+                "test": "hello leslie youre brilliant NOT"
+            }
+        except Exception as e:
+            return None

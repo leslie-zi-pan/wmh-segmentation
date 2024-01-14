@@ -100,7 +100,31 @@ def save_slice(img: Tensor, fname: str, path: str, to_nifti: bool) -> None:
     logger.info(f"Slice saved: {fout}")
 
 
-def slice_and_save_volume_image(vol: Tensor, fname: str, path: str, to_nifti: bool=True):
+def slice_tensor_volume(vol: Tensor, axis: 0 | 1 | 2 = 2) -> dict | None:
+    """Slice tensor volume
+
+    Args:
+        vol (Tensor): Image volume of shape (C, H, W).
+        axis: Axis to slice volume image by.
+    """
+    slice_length = vol.shape[axis]
+
+    result = {}
+    for slice_idx in range(slice_length):
+        match axis:
+            case 0:
+                result[slice_idx] = vol[slice_idx, ...]
+            case 1:
+                result[slice_idx] = vol[:, slice_idx, :]
+            case 2:
+                result[slice_idx] = vol[..., slice_idx]
+
+    return result or None
+
+
+def slice_and_save_volume_image(
+    vol: Tensor, fname: str, path: str, to_nifti: bool = True
+):
     """Slices a 3D image volume and saves each slice to a file.
 
     Args:
@@ -276,4 +300,3 @@ def get_interim_data_path(data_paths):
             image_dict.append(slice_dict)
 
     return image_dict
-

@@ -1,4 +1,5 @@
 import torch
+from torch.utils.data import Dataset
 from src.enums import DataDict
 from src.pytorch_utils import get_dicts_from_dicts, one_hot
 from src.settings.config import get_app_settings
@@ -13,7 +14,7 @@ class ImagePredictor():
         dataset: The dataset to predict on.
     """
 
-    def __init__(self, model: torch.nn.Module, dataset: torch.utils.data.Dataset):
+    def __init__(self, model: torch.nn.Module, dataset: Dataset):
         self.model = model
         # Passed as 2D slices with information about depth for reconstruction
         self.dataset = dataset

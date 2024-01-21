@@ -18,9 +18,10 @@ async def extract_wmh(image_shape: Annotated[dict, Depends(segment_dependency)])
     Returns:
         The segmented image of the brain image.
     """
+    print(image_shape)
     if not image_shape:
         raise HTTPException(status_code=400, detail=[
-            "There was an issue reading and processing the data provided", 
+            "There was an issue reading and processing the data provided",
             "You must send through .nii or .png file only"])
 
     return image_shape

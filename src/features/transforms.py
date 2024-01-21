@@ -164,5 +164,3 @@ class ConvertToMultiChannelBasedOnLabelsClassesd(MapTransform):
             d[key] = np.stack(result, axis=0).astype(np.float32)
 
         return d
-
-from monai.transforms import ToTensor

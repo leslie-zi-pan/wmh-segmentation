@@ -23,7 +23,7 @@ from src.enums import (
 from src.pytorch_utils import (
     image_directories_handler,
     read_image_volume,
-    slice_and_save_volume_image,
+    slice_and_save_volume_image_handler,
 )
 
 logger = logging.getLogger(__name__)
@@ -84,13 +84,13 @@ def slice_volume_handler(raw_data_paths, interim_dir_dict):
         out_dir_image_flair = os.path.join(output_country_dir, f"{subj_id}/Image/Flair")
         out_dir_label = os.path.join(output_country_dir, f"{subj_id}/Label/")
 
-        num_slices_image_t1 = slice_and_save_volume_image(
+        num_slices_image_t1 = slice_and_save_volume_image_handler(
             img_t1, f"brain_{str(subj_id)}", out_dir_image_t1
         )
-        num_slices_image_flair = slice_and_save_volume_image(
+        num_slices_image_flair = slice_and_save_volume_image_handler(
             img_flair, f"brain_{str(subj_id)}", out_dir_image_flair
         )
-        num_slices_label = slice_and_save_volume_image(
+        num_slices_label = slice_and_save_volume_image_handler(
             label, f"brain_{str(subj_id)}", out_dir_label
         )
 

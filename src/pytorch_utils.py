@@ -37,6 +37,7 @@ def read_image_volume(img_path, normalize=False):
     """
 
     img = nib.load(img_path).get_fdata()
+    
     if normalize:
         return normalize_img_intensity_range(img)
     else:
@@ -120,6 +121,61 @@ def slice_tensor_volume(vol: Tensor, axis: 0 | 1 | 2 = 2) -> dict | None:
                 result[slice_idx] = vol[..., slice_idx]
 
     return result or None
+
+
+def slice_volume_handler(
+    vol: Tensor,
+    fname: str,
+    axis_to_slice: list[int] = [2],
+    decimate: int = 3,
+):
+    """Slices a 3D image volume and saves each slice to a file.
+
+    Args:
+        vol (Tensor): Image volume of shape (C, H, W).
+        fname (str): Filename for the saved slices.
+        path (str): Path to the directory where the slices will be saved.
+        to_nifti (bool): Whether to save the slices as NIFTI files.
+    """
+
+    image_slices = {}
+    for axis in axis_to_slice:
+        logger.info(f"Slicing along axis {axis}")
+        cur_axis_slices = slice_tensor_volume(vol, axis)
+
+        for slice_idx, slice_image in cur_axis_slices.items():
+            slice_fname = f"{fname}-slice{str(slice_idx).zfill(decimate)}_axis{str(axis)}"
+            image_slices[slice_fname] = slice_image
+
+    return image_slices
+
+
+def slice_and_save_volume_image_handler(
+        vol: Tensor, fname: str, path: str,
+        to_nifti: bool = True):
+    """Slices a 3D image volume and saves each slice to a file.
+
+    Args:
+        vol (Tensor): Image volume of shape (C, H, W).
+        fname (str): Filename for the saved slices.
+        path (str): Path to the directory where the slices will be saved.
+        to_nifti (bool): Whether to save the slices as NIFTI files.
+    """
+    logger.info("Slicing volume tensors")
+    image_slices = slice_volume_handler(vol, fname)
+    slices_count = 0
+
+    for slice_fname, slice_image in image_slices.items():
+        logger.info(f"Saving slice: {slice_fname}")
+        save_slice(
+                slice_image,
+                slice_fname,
+                path,
+                to_nifti,
+            )
+        slices_count += 1
+
+    return slices_count
 
 
 def slice_and_save_volume_image(

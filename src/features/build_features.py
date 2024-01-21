@@ -11,7 +11,9 @@ from monai.transforms import (
     RandShiftIntensityd,
     Rand2DElasticd,
     RandZoomd,
+    ToMetaTensord,
 )
+import torch
 
 from src.enums import DataDict
 from src.features.transforms import (
@@ -94,6 +96,55 @@ val_transform = Compose(
 test_transform = Compose(
     [
         LoadImaged(keys=[DataDict.ImageT1, DataDict.ImageFlair, DataDict.Label]),
+        EnsureChannelFirstd(
+            keys=[DataDict.ImageT1, DataDict.ImageFlair, DataDict.Label]
+        ),
+        ConvertToMultiChannelBasedOnLabelsClassesd(keys=[DataDict.Label]),
+        Spacingd(
+            keys=[DataDict.ImageT1, DataDict.ImageFlair, DataDict.Label],
+            pixdim=(1.5, 1.5, 2.0),
+            mode=("bilinear", "bilinear", "nearest"),
+        ),
+        Resized(
+            keys=[DataDict.ImageT1, DataDict.ImageFlair, DataDict.Label],
+            spatial_size=[256, 256],
+        ),
+        Orientationd(
+            keys=[DataDict.ImageT1, DataDict.ImageFlair, DataDict.Label], axcodes="RAS"
+        ),
+        ToTensord(keys=[DataDict.ImageT1, DataDict.ImageFlair, DataDict.Label]),
+        ImagesToMultiChannel(keys=[DataDict.ImageT1, DataDict.ImageFlair]),
+    ]
+)
+
+serving_transform = Compose(
+    [
+        # ToMetaTensord(keys=[DataDict.ImageT1, DataDict.ImageFlair]),
+        EnsureChannelFirstd(
+            keys=[DataDict.ImageT1, DataDict.ImageFlair],
+            channel_dim="no_channel"
+        ),
+        Spacingd(
+            keys=[DataDict.ImageT1, DataDict.ImageFlair],
+            pixdim=(1.5, 1.5),
+            mode=("bilinear", "bilinear"),
+        ),
+        Resized(
+            keys=[DataDict.ImageT1, DataDict.ImageFlair],
+            spatial_size=[256, 256],
+        ),
+        Orientationd(keys=[DataDict.ImageT1, DataDict.ImageFlair], axcodes="RAS"),
+        ToTensord(keys=[DataDict.ImageT1, DataDict.ImageFlair]),
+        ImagesToMultiChannel(keys=[DataDict.ImageT1, DataDict.ImageFlair]),
+    ]
+)
+
+
+
+inference_transform = Compose(
+    [
+        # CustomTransform(keys=[DataDict.ImageT1, DataDict.ImageFlair, DataDict.Label]),
+        ToMetaTensord(keys=[DataDict.ImageT1, DataDict.ImageFlair, DataDict.Label]),
         EnsureChannelFirstd(
             keys=[DataDict.ImageT1, DataDict.ImageFlair, DataDict.Label]
         ),

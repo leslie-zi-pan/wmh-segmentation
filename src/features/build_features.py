@@ -106,15 +106,15 @@ test_transform = Compose(
             pixdim=(1.5, 1.5, 2.0),
             mode=("bilinear", "bilinear", "nearest"),
         ),
-        Resized(
-            keys=[DataDict.ImageT1, DataDict.ImageFlair, DataDict.Label],
-            spatial_size=[256, 256],
-        ),
-        Orientationd(
-            keys=[DataDict.ImageT1, DataDict.ImageFlair, DataDict.Label], axcodes="RAS"
-        ),
-        ToTensord(keys=[DataDict.ImageT1, DataDict.ImageFlair, DataDict.Label]),
-        ImagesToMultiChannel(keys=[DataDict.ImageT1, DataDict.ImageFlair]),
+        # Resized(
+        #     keys=[DataDict.ImageT1, DataDict.ImageFlair, DataDict.Label],
+        #     spatial_size=[256, 256],
+        # ),
+        # Orientationd(
+        #     keys=[DataDict.ImageT1, DataDict.ImageFlair, DataDict.Label], axcodes="RAS"
+        # ),
+        # ToTensord(keys=[DataDict.ImageT1, DataDict.ImageFlair, DataDict.Label]),
+        # ImagesToMultiChannel(keys=[DataDict.ImageT1, DataDict.ImageFlair]),
     ]
 )
 

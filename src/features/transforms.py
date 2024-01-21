@@ -164,3 +164,19 @@ class ConvertToMultiChannelBasedOnLabelsClassesd(MapTransform):
             d[key] = np.stack(result, axis=0).astype(np.float32)
 
         return d
+
+from monai.transforms import ToTensor
+
+
+class CustomTransform(MapTransform):
+    """
+    Convert labels to multi channels based on brats classes:
+    label 1 is the WMH
+
+    """
+
+    def __call__(self, data: dict) -> dict:
+        for key in self.keys:
+            data[key] = ToTensor(data[key])
+
+        return data

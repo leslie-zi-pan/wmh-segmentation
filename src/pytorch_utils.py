@@ -37,6 +37,7 @@ def read_image_volume(img_path, normalize=False):
     """
 
     img = nib.load(img_path).get_fdata()
+    
     if normalize:
         return normalize_img_intensity_range(img)
     else:
